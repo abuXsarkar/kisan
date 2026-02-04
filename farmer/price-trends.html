@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Trends | Farmer Dashboard | KisanDirect NE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .trend-hero {
+            background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+            color: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .prediction-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin-top: var(--space-lg);
+        }
+
+        .prediction-icon {
+            font-size: 48px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-xl);
+        }
+
+        .chart-wrapper {
+            height: 400px;
+            position: relative;
+        }
+
+        .price-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .price-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .price-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .price-card.selected {
+            border: 2px solid var(--primary);
+            background: #E8F5E9;
+        }
+
+        .price-card-icon {
+            font-size: 40px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .price-card-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .price-card-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .price-card-change {
+            font-size: 13px;
+            margin-top: var(--space-xs);
+        }
+
+        .price-card-change.up {
+            color: var(--success);
+        }
+
+        .price-card-change.down {
+            color: var(--error);
+        }
+
+        .price-card-change.stable {
+            color: var(--text-muted);
+        }
+
+        .market-comparison {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: var(--space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .our-price {
+            background: #E8F5E9;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .time-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-full);
+            padding: 4px;
+        }
+
+        .time-toggle button {
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+        }
+
+        .time-toggle button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 1024px) {
+            .price-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span>🌾</span>
+                <span>KisanDirect</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="dashboard.html" class="sidebar-link">
+                        <span class="icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="icon">📦</span>
+                        <span>My Products</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="icon">🛒</span>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="cold-storage.html" class="sidebar-link">
+                        <span class="icon">❄️</span>
+                        <span>Cold Storage</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="price-trends.html" class="sidebar-link active">
+                        <span class="icon">📈</span>
+                        <span>Price Trends</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="pickup.html" class="sidebar-link">
+                        <span class="icon">🚚</span>
+                        <span>Schedule Pickup</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div style="margin-top: auto; padding-top: var(--space-xl); border-top: 1px solid var(--border);">
+                <a href="../index.html" class="sidebar-link">
+                    <span class="icon">🛍️</span>
+                    <span>Customer View</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">📈 Price Trends</h1>
+                <div class="time-toggle">
+                    <button onclick="setTimeRange('daily')">Daily</button>
+                    <button class="active" onclick="setTimeRange('weekly')">Weekly</button>
+                    <button onclick="setTimeRange('monthly')">Monthly</button>
+                </div>
+            </div>
+
+            <!-- AI Prediction -->
+            <div class="trend-hero animate-fade-in">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 style="font-size: 24px; font-weight: 700;">🤖 AI Price Prediction</h2>
+                        <p style="opacity: 0.9; margin-top: var(--space-xs);">Based on market analysis and seasonal
+                            patterns</p>
+                    </div>
+                    <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">
+                        Updated 2 hours ago
+                    </span>
+                </div>
+
+                <div class="prediction-card">
+                    <div class="flex items-center gap-lg">
+                        <div class="prediction-icon">📊</div>
+                        <div>
+                            <h3 style="font-size: 20px; font-weight: 600;" id="predictionTitle">Bhut Jolokia prices
+                                expected to rise 5%</h3>
+                            <p style="opacity: 0.9; margin-top: var(--space-xs);" id="predictionDesc">
+                                Demand is increasing as export orders pick up. Consider listing more stock this week.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vegetable Selector -->
+            <div class="price-cards stagger" id="vegetableCards">
+                <!-- Loaded by JS -->
+            </div>
+
+            <!-- Chart -->
+            <div class="chart-container animate-fade-in-up">
+                <div class="flex justify-between items-center mb-lg">
+                    <h3 style="font-size: 18px; font-weight: 600;" id="chartTitle">📊 Bhut Jolokia Price Trend (Weekly)
+                    </h3>
+                    <div class="flex gap-md">
+                        <span class="badge badge-organic">Current: ₹450/250g</span>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Market Comparison -->
+            <div class="market-comparison animate-fade-in-up">
+                <h3 style="font-size: 18px; font-weight: 600; margin-bottom: var(--space-lg);">🏪 Market Comparison</h3>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Market / Platform</th>
+                            <th>Price</th>
+                            <th>Your Earnings</th>
+                            <th>Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="our-price">
+                            <td><strong>🌾 KisanDirect NE</strong></td>
+                            <td>₹450/250g</td>
+                            <td>₹369 (82%)</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Local Mandi (Fancy Bazaar)</td>
+                            <td>₹350/250g</td>
+                            <td>₹175 (~50%)</td>
+                            <td style="color: var(--error);">-₹194 less</td>
+                        </tr>
+                        <tr>
+                            <td>Middleman (Traditional)</td>
+                            <td>₹300/250g</td>
+                            <td>₹120 (~40%)</td>
+                            <td style="color: var(--error);">-₹249 less</td>
+                        </tr>
+                        <tr>
+                            <td>BigBasket (if available)</td>
+                            <td>₹500/250g</td>
+                            <td>₹200 (~40%)</td>
+                            <td style="color: var(--error);">-₹169 less</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div
+                    style="margin-top: var(--space-lg); padding: var(--space-md); background: #E8F5E9; border-radius: var(--radius-md);">
+                    <strong style="color: var(--primary);">💡 Insight:</strong> You earn ₹169-₹249 more per 250g on
+                    KisanDirect NE compared to other channels!
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/mock-data.js"></script>
+    <script>
+        let selectedVegetable = 'Bhut Jolokia';
+        let priceChart = null;
+
+        const vegetables = [
+            { name: 'Bhut Jolokia', icon: '🌶️', price: 450, change: '+5%', trend: 'up' },
+            { name: 'Kaji Nemu', icon: '🍋', price: 120, change: '0%', trend: 'stable' },
+            { name: 'Lai Xaak', icon: '🥬', price: 40, change: '-3%', trend: 'down' },
+            { name: 'Cabbage', icon: '🥬', price: 30, change: '+2%', trend: 'up' }
+        ];
+
+        function loadVegetableCards() {
+            const container = document.getElementById('vegetableCards');
+            container.innerHTML = vegetables.map(veg => `
+                <div class="price-card ${veg.name === selectedVegetable ? 'selected' : ''}" 
+                     onclick="selectVegetable('${veg.name}')">
+                    <div class="price-card-icon">${veg.icon}</div>
+                    <div class="price-card-name">${veg.name}</div>
+                    <div class="price-card-price">₹${veg.price}</div>
+                    <div class="price-card-change ${veg.trend}">${veg.change} this week</div>
+                </div>
+            `).join('');
+        }
+
+        function selectVegetable(name) {
+            selectedVegetable = name;
+            loadVegetableCards();
+            updateChart();
+            updatePrediction();
+        }
+
+        function setTimeRange(range) {
+            document.querySelectorAll('.time-toggle button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateChart();
+        }
+
+        function updatePrediction() {
+            const predictions = {
+                'Bhut Jolokia': { title: 'Bhut Jolokia prices expected to rise 5%', desc: 'Demand is increasing as export orders pick up. Consider listing more stock this week.' },
+                'Kaji Nemu': { title: 'Kaji Nemu prices stable', desc: 'Market is balanced. Good time for consistent sales.' },
+                'Lai Xaak': { title: 'Lai Xaak prices may dip slightly', desc: 'Peak harvest season approaching. Consider cold storage to wait for better prices.' },
+                'Cabbage': { title: 'Cabbage prices rising slowly', desc: 'Strong restaurant demand. Good time to increase supply.' }
+            };
+
+            const pred = predictions[selectedVegetable];
+            document.getElementById('predictionTitle').textContent = pred.title;
+            document.getElementById('predictionDesc').textContent = pred.desc;
+            document.getElementById('chartTitle').textContent = `📊 ${selectedVegetable} Price Trend (Weekly)`;
+        }
+
+        function updateChart() {
+            const trendData = MOCK_DATA.priceTrends[selectedVegetable] || MOCK_DATA.priceTrends['Bhut Jolokia'];
+
+            if (priceChart) {
+                priceChart.destroy();
+            }
+
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: trendData.labels,
+                    datasets: [{
+                        label: 'Price (₹)',
+                        data: trendData.weekly,
+                        borderColor: '#2E7D32',
+                        backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#2E7D32',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1A1A2E',
+                            padding: 12,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 16 },
+                            callbacks: {
+                                label: function (context) {
+                                    return '₹' + context.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return '₹' + value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadVegetableCards();
+            updateChart();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanDirect NE - Fresh from Assam's Farms</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Homepage Specific Styles */
+        .how-it-works {
+            background: var(--bg-secondary);
+        }
+
+        .step-card {
+            text-align: center;
+            padding: var(--space-xl);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .step-icon {
+            font-size: 48px;
+            margin-bottom: var(--space-md);
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .specialty-section {
+            background: var(--gradient-hero);
+            color: white;
+        }
+
+        .specialty-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+        }
+
+        .specialty-item {
+            text-align: center;
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-base);
+        }
+
+        .specialty-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .specialty-icon {
+            font-size: 48px;
+            margin-bottom: var(--space-md);
+        }
+
+        .specialty-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .specialty-name-assamese {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .trust-section {
+            background: var(--bg-card);
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-xl);
+            text-align: center;
+        }
+
+        .trust-stat {
+            padding: var(--space-lg);
+        }
+
+        .trust-value {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .trust-label {
+            color: var(--text-secondary);
+        }
+
+        .cta-section {
+            background: var(--gradient-orange);
+            color: white;
+            text-align: center;
+            padding: var(--space-3xl) 0;
+        }
+
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+        }
+
+        .cta-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: var(--space-xl);
+        }
+
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: var(--space-2xl) 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--space-2xl);
+        }
+
+        .footer-brand {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            transition: color var(--transition-fast);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .demo-banner {
+            background: linear-gradient(90deg, #FF6B35, #F7931E);
+            color: white;
+            text-align: center;
+            padding: var(--space-sm) 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 1024px) {
+
+            .specialty-grid,
+            .trust-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .specialty-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Demo Banner -->
+    <div class="demo-banner">
+        🚀 This is a demo prototype for KisanDirect NE | <a href="farmer/dashboard.html"
+            style="color: white; text-decoration: underline;">Switch to Farmer View</a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-logo">
+                <span>🌾</span>
+                <span>KisanDirect NE</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="products.html" class="nav-link">Products</a>
+                <a href="kisan-tracker.html" class="nav-link">Track Your Kisan</a>
+                <a href="#" class="nav-link">About</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="cart.html" class="nav-cart">
+                    🛒
+                    <span class="nav-cart-count" id="cartCount">3</span>
+                </a>
+                <button class="btn btn-primary btn-sm">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text animate-fade-in-up">
+                    <h1 class="hero-title">Fresh from Assam's Farms to Your Table</h1>
+                    <p class="hero-tagline">Order farm-fresh vegetables directly from local farmers. Know exactly where
+                        your food comes from. Support Assam's farming community.</p>
+                    <div class="flex gap-md">
+                        <a href="products.html" class="btn btn-lg" style="background: white; color: var(--primary);">
+                            Shop Now 🥬
+                        </a>
+                        <a href="kisan-tracker.html" class="btn btn-lg btn-ghost"
+                            style="color: white; border: 2px solid white;">
+                            Track Your Kisan
+                        </a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">2,700+</div>
+                            <div class="hero-stat-label">Farmers</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">4.2 hrs</div>
+                            <div class="hero-stat-label">Avg Delivery</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">82%</div>
+                            <div class="hero-stat-label">Goes to Farmers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual animate-fade-in">
+                    <div
+                        style="background: rgba(255,255,255,0.1); border-radius: var(--radius-xl); padding: var(--space-xl); text-align: center;">
+                        <div style="font-size: 120px;">🧺</div>
+                        <p style="font-size: 18px; margin-top: var(--space-md);">Fresh Produce, Direct from Farm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How KisanDirect Works</h2>
+                <p class="section-subtitle">From Assam's farms to your kitchen in 3 simple steps</p>
+            </div>
+
+            <div class="grid-3 stagger">
+                <div class="step-card card animate-fade-in-up">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">📱</div>
+                    <h3 class="step-title">Browse & Order</h3>
+                    <p class="step-desc">Explore fresh produce from verified local farmers. Add to cart and checkout in
+                        seconds.</p>
+                </div>
+
+                <div class="step-card card animate-fade-in-up">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">👨‍🌾</div>
+                    <h3 class="step-title">Farmer Harvests</h3>
+                    <p class="step-desc">Your order goes directly to the farmer. They harvest fresh produce just for
+                        you.</p>
+                </div>
+
+                <div class="step-card card animate-fade-in-up">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">🚚</div>
+                    <h3 class="step-title">Same-Day Delivery</h3>
+                    <p class="step-desc">Farm-fresh vegetables delivered to your doorstep within hours. Scan QR to trace
+                        your Kisan!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Today's Fresh Picks 🌿</h2>
+                <p class="section-subtitle">Harvested this morning from farms across Assam</p>
+            </div>
+
+            <div class="product-grid stagger" id="featuredProducts">
+                <!-- Products loaded by JS -->
+            </div>
+
+            <div class="text-center mt-xl">
+                <a href="products.html" class="btn btn-primary btn-lg">View All Products →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NE Specialty Produce -->
+    <section class="specialty-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" style="color: white;">Northeast Specialty Produce</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">Unique flavors you won't find anywhere
+                    else</p>
+            </div>
+
+            <div class="specialty-grid">
+                <div class="specialty-item">
+                    <div class="specialty-icon">🌶️</div>
+                    <div class="specialty-name">Bhut Jolokia</div>
+                    <div class="specialty-name-assamese">ভূত জলকীয়া</div>
+                </div>
+                <div class="specialty-item">
+                    <div class="specialty-icon">🍋</div>
+                    <div class="specialty-name">Kaji Nemu</div>
+                    <div class="specialty-name-assamese">কাজি নেমু</div>
+                </div>
+                <div class="specialty-item">
+                    <div class="specialty-icon">🎋</div>
+                    <div class="specialty-name">Bamboo Shoot</div>
+                    <div class="specialty-name-assamese">খৰিচা</div>
+                </div>
+                <div class="specialty-item">
+                    <div class="specialty-icon">🥬</div>
+                    <div class="specialty-name">Lai Xaak</div>
+                    <div class="specialty-name-assamese">লাই শাক</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Stats -->
+    <section class="trust-section section">
+        <div class="container">
+            <div class="trust-grid">
+                <div class="trust-stat">
+                    <div class="trust-value">2,741</div>
+                    <div class="trust-label">Farmer Partners</div>
+                </div>
+                <div class="trust-stat">
+                    <div class="trust-value">15,420</div>
+                    <div class="trust-label">Orders Delivered</div>
+                </div>
+                <div class="trust-stat">
+                    <div class="trust-value">156</div>
+                    <div class="trust-label">Villages Covered</div>
+                </div>
+                <div class="trust-stat">
+                    <div class="trust-value">82%</div>
+                    <div class="trust-label">Farmer Earnings</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QR Traceability Feature -->
+    <section class="section">
+        <div class="container">
+            <div class="grid-2 gap-xl items-center">
+                <div>
+                    <h2 class="section-title text-left">Know Your Kisan 🔍</h2>
+                    <p class="text-secondary mt-md mb-lg">Every product comes with a unique QR code. Scan it to see
+                        exactly who grew your food, where it was grown, and when it was harvested.</p>
+
+                    <ul style="list-style: none;">
+                        <li class="flex gap-md items-center mb-md">
+                            <span style="font-size: 24px;">✅</span>
+                            <span>Farmer profile with photo & story</span>
+                        </li>
+                        <li class="flex gap-md items-center mb-md">
+                            <span style="font-size: 24px;">✅</span>
+                            <span>Farm location & certifications</span>
+                        </li>
+                        <li class="flex gap-md items-center mb-md">
+                            <span style="font-size: 24px;">✅</span>
+                            <span>Harvest date & freshness tracking</span>
+                        </li>
+                        <li class="flex gap-md items-center mb-md">
+                            <span style="font-size: 24px;">✅</span>
+                            <span>Journey from farm to your door</span>
+                        </li>
+                    </ul>
+
+                    <a href="kisan-tracker.html" class="btn btn-primary mt-lg">Try Kisan Tracker Demo →</a>
+                </div>
+
+                <div class="qr-container">
+                    <div style="font-size: 14px; color: var(--text-muted); margin-bottom: var(--space-md);">Sample QR
+                        Code</div>
+                    <div class="qr-code" id="demoQR"></div>
+                    <div class="qr-label mt-md">
+                        <strong>KISANDIRECT-P001-F003</strong><br>
+                        Bhut Jolokia · Bhupen Das, Jorhat
+                    </div>
+                    <a href="kisan-tracker.html?id=P001" class="btn btn-secondary mt-lg">Scan This Code →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Ready to Taste the Difference?</h2>
+            <p class="cta-subtitle">Join thousands of families who eat fresh, support local, and know their farmer.</p>
+            <a href="products.html" class="btn btn-lg" style="background: white; color: var(--secondary);">
+                Start Shopping Now 🛒
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">🌾 KisanDirect NE</div>
+                    <p class="footer-desc">From Assam's Farms to Your Table – Fresh, Fair, Traceable. Empowering 27
+                        lakh+ farmer families across Northeast India.</p>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="kisan-tracker.html">Track Your Kisan</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">For Farmers</h4>
+                    <ul class="footer-links">
+                        <li><a href="farmer/dashboard.html">Farmer Dashboard</a></li>
+                        <li><a href="farmer/cold-storage.html">Cold Storage</a></li>
+                        <li><a href="farmer/price-trends.html">Price Trends</a></li>
+                        <li><a href="#">Join as Farmer</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li>📞 +91 98765 43210</li>
+                        <li>📧 hello@kisandirect.ne</li>
+                        <li>📍 Guwahati, Assam</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: var(--space-xl); padding-top: var(--space-lg); text-align: center; color: rgba(255,255,255,0.5); font-size: 14px;">
+                © 2026 KisanDirect NE. Made with ❤️ in Assam | Demo Prototype
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/mock-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script>
+        // Load featured products
+        function loadFeaturedProducts() {
+            const container = document.getElementById('featuredProducts');
+            const featured = MOCK_DATA.products.slice(0, 4);
+
+            container.innerHTML = featured.map(product => {
+                const farmer = getFarmerById(product.farmerId);
+                return `
+                    <div class="card product-card animate-fade-in-up">
+                        <div class="badge badge-fresh">${product.freshness}</div>
+                        <div class="card-image">
+                            <span style="font-size: 80px;">${product.image}</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">${product.name}</h3>
+                            <p class="card-subtitle">${product.nameAssamese}</p>
+                            <div class="flex justify-between items-center mt-md">
+                                <div class="product-price">
+                                    ₹${product.price} <span class="product-unit">/ ${product.unit}</span>
+                                </div>
+                                ${product.organic ? '<span class="badge badge-organic">🌿 Organic</span>' : ''}
+                            </div>
+                            <div class="product-farmer">
+                                <img src="${farmer.photo}" alt="${farmer.name}">
+                                <span class="product-farmer-name">by <strong>${farmer.name}</strong></span>
+                            </div>
+                            <button class="btn btn-primary w-full mt-md" onclick="addToCart('${product.id}')">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Generate demo QR
+        function generateDemoQR() {
+            const qr = qrcode(0, 'M');
+            qr.addData('KISANDIRECT-P001-F003-1706961600000');
+            qr.make();
+            document.getElementById('demoQR').innerHTML = qr.createSvgTag(4, 0);
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = getProductById(productId);
+            if (product) {
+                MOCK_DATA.cart.push({ ...product, quantity: 1 });
+                updateCartCount();
+                alert(`${product.name} added to cart!`);
+            }
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const count = MOCK_DATA.cart.length || 3; // Default 3 for demo
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeaturedProducts();
+            generateDemoQR();
+        });
+    </script>
+</body>
+
+</html>

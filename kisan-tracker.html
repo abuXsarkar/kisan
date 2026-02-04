@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kisan Tracker | KisanDirect NE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .tracker-hero {
+            background: var(--gradient-hero);
+            color: white;
+            padding: var(--space-3xl) 0;
+            text-align: center;
+        }
+
+        .scan-area {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            backdrop-filter: blur(10px);
+        }
+
+        .scan-icon {
+            font-size: 80px;
+            margin-bottom: var(--space-lg);
+            animation: pulse 2s infinite;
+        }
+
+        .farmer-profile {
+            max-width: 800px;
+            margin: calc(-1 * var(--space-3xl)) auto 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .farmer-header {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .farmer-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            border: 5px solid var(--primary);
+            margin: calc(-75px - var(--space-lg)) auto var(--space-lg);
+        }
+
+        .farmer-name {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .farmer-location {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            margin-top: var(--space-xs);
+        }
+
+        .farmer-badges-row {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .farmer-stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border);
+        }
+
+        .farmer-stat {
+            text-align: center;
+        }
+
+        .farmer-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .farmer-stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .farmer-bio {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-top: var(--space-xl);
+            font-style: italic;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .farmer-bio::before {
+            content: '"';
+            font-size: 48px;
+            color: var(--primary);
+            position: absolute;
+            top: 0;
+            left: var(--space-md);
+            line-height: 1;
+        }
+
+        .journey-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-top: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .journey-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-xl);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: var(--space-2xl);
+            padding-bottom: var(--space-xl);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 28px;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .timeline-dot.pending {
+            background: var(--border);
+        }
+
+        .timeline-content {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: var(--space-xs);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .produces-section {
+            margin-top: var(--space-xl);
+        }
+
+        .produces-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .produce-item {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+
+        .produce-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .produce-icon {
+            font-size: 48px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .map-placeholder {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-radius: var(--radius-lg);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: var(--space-xl);
+        }
+
+        @media (max-width: 768px) {
+            .farmer-stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .produces-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-logo">
+                <span>🌾</span>
+                <span>KisanDirect NE</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="products.html" class="nav-link">Products</a>
+                <a href="kisan-tracker.html" class="nav-link active">Track Your Kisan</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="cart.html" class="nav-cart">
+                    🛒
+                    <span class="nav-cart-count">3</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero / Scan Area -->
+    <section class="tracker-hero" id="scanSection">
+        <div class="container">
+            <div class="scan-area">
+                <div class="scan-icon">📱</div>
+                <h1 style="font-size: 28px; font-weight: 700; margin-bottom: var(--space-md);">Track Your Kisan</h1>
+                <p style="opacity: 0.9; margin-bottom: var(--space-xl);">Scan the QR code on your produce package or
+                    enter the tracking ID</p>
+
+                <div style="display: flex; gap: var(--space-md);">
+                    <input type="text" class="input" placeholder="Enter Tracking ID (e.g., P001)" id="trackingInput"
+                        style="flex: 1; text-align: center; font-size: 16px;">
+                    <button class="btn" style="background: white; color: var(--primary);" onclick="trackProduct()">
+                        Track →
+                    </button>
+                </div>
+
+                <p style="margin-top: var(--space-lg); font-size: 14px; opacity: 0.8;">
+                    Demo: Try tracking ID <strong>P001</strong>, <strong>P002</strong>, or <strong>P003</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farmer Profile (Hidden initially) -->
+    <section class="section" id="farmerSection" style="display: none;">
+        <div class="container farmer-profile" id="farmerProfile">
+            <!-- Loaded by JS -->
+        </div>
+    </section>
+
+    <script src="js/mock-data.js"></script>
+    <script>
+        function trackProduct() {
+            const input = document.getElementById('trackingInput').value.toUpperCase();
+            const productId = input.startsWith('P') ? input : 'P' + input.padStart(3, '0');
+            const product = getProductById(productId);
+
+            if (product) {
+                showFarmerProfile(product);
+            } else {
+                alert('Product not found. Try P001, P002, or P003');
+            }
+        }
+
+        function showFarmerProfile(product) {
+            const farmer = getFarmerById(product.farmerId);
+            document.getElementById('scanSection').style.display = 'none';
+            document.getElementById('farmerSection').style.display = 'block';
+
+            const container = document.getElementById('farmerProfile');
+            container.innerHTML = `
+                <!-- Header Card -->
+                <div class="farmer-header animate-fade-in-up">
+                    <img src="${farmer.photo}" alt="${farmer.name}" class="farmer-photo">
+                    <h2 class="farmer-name">${farmer.name}</h2>
+                    <p class="farmer-location">📍 ${farmer.village}, ${farmer.district} District</p>
+                    
+                    <div class="farmer-badges-row">
+                        ${farmer.certifications.map(c => `<span class="badge badge-verified">✓ ${c}</span>`).join('')}
+                        <span class="badge badge-premium">⭐ Top Farmer</span>
+                    </div>
+                    
+                    <div class="farmer-stats-row">
+                        <div class="farmer-stat">
+                            <div class="farmer-stat-value">${farmer.experience}</div>
+                            <div class="farmer-stat-label">Experience</div>
+                        </div>
+                        <div class="farmer-stat">
+                            <div class="farmer-stat-value">${farmer.landSize}</div>
+                            <div class="farmer-stat-label">Farm Size</div>
+                        </div>
+                        <div class="farmer-stat">
+                            <div class="farmer-stat-value">⭐ ${farmer.rating}</div>
+                            <div class="farmer-stat-label">Rating</div>
+                        </div>
+                        <div class="farmer-stat">
+                            <div class="farmer-stat-value">${farmer.totalOrders}</div>
+                            <div class="farmer-stat-label">Orders</div>
+                        </div>
+                    </div>
+                    
+                    <div class="farmer-bio">
+                        ${farmer.bio}
+                    </div>
+                </div>
+                
+                <!-- Product Journey -->
+                <div class="journey-section animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="journey-header">
+                        <div>
+                            <h3 style="font-size: 20px; font-weight: 600;">📦 Your ${product.name} Journey</h3>
+                            <p style="color: var(--text-secondary); font-size: 14px;">Track ID: KISANDIRECT-${product.id}-${farmer.id}</p>
+                        </div>
+                        <span class="badge badge-fresh">${product.freshness}</span>
+                    </div>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Today, 5:30 AM</div>
+                                <div class="timeline-title">🌱 Harvested from Farm</div>
+                                <div class="timeline-desc">${farmer.name} harvested fresh ${product.name} from the farm in ${farmer.village}</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Today, 6:00 AM</div>
+                                <div class="timeline-title">✅ Quality Checked</div>
+                                <div class="timeline-desc">Passed organic certification and freshness inspection</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Today, 6:30 AM</div>
+                                <div class="timeline-title">📦 Packed & QR Tagged</div>
+                                <div class="timeline-desc">Fresh produce packed with unique QR code for traceability</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Today, 7:00 AM</div>
+                                <div class="timeline-title">🚚 In Transit</div>
+                                <div class="timeline-desc">On the way to Guwahati distribution center</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot pending">⏳</div>
+                            <div class="timeline-content" style="opacity: 0.6;">
+                                <div class="timeline-time">Est. 10:00 AM</div>
+                                <div class="timeline-title">🏠 Delivered to You</div>
+                                <div class="timeline-desc">Fresh produce at your doorstep!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Map Placeholder -->
+                <div class="map-placeholder animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px;">🗺️</div>
+                        <p style="color: var(--primary-dark);">📍 ${farmer.village}, ${farmer.district} → Your Location</p>
+                        <p style="font-size: 13px; color: var(--text-secondary);">~45 km journey</p>
+                    </div>
+                </div>
+                
+                <!-- Other Produces -->
+                <div class="produces-section animate-fade-in-up" style="animation-delay: 0.4s;">
+                    <h3 style="font-size: 20px; font-weight: 600;">🌿 Also from ${farmer.name}'s Farm</h3>
+                    <div class="produces-grid">
+                        ${farmer.produces.map(p => `
+                            <div class="produce-item">
+                                <div class="produce-icon">${getProduceIcon(p)}</div>
+                                <div style="font-weight: 500;">${p}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- Back Button -->
+                <div style="text-align: center; margin-top: var(--space-2xl);">
+                    <button class="btn btn-secondary" onclick="resetTracker()">← Track Another Product</button>
+                    <a href="products.html" class="btn btn-primary">Shop More from ${farmer.name}</a>
+                </div>
+            `;
+        }
+
+        function getProduceIcon(name) {
+            const icons = {
+                'Kaji Nemu': '🍋', 'Lai Xaak': '🥬', 'Bhoot Jolokia': '🌶️', 'Bhut Jolokia': '🌶️',
+                'Paleng Xaak': '🥗', 'Dhekia Xaak': '🌿', 'Mati Kadhi': '🌸',
+                "Bird's Eye Chili": '🌶️', 'Tomato': '🍅', 'Cabbage': '🥬',
+                'Cauliflower': '🥦', 'Potato': '🥔', 'Onion': '🧅',
+                'Robab Tenga': '🍊', 'Komola': '🍊'
+            };
+            return icons[name] || '🌱';
+        }
+
+        function resetTracker() {
+            document.getElementById('scanSection').style.display = 'block';
+            document.getElementById('farmerSection').style.display = 'none';
+            document.getElementById('trackingInput').value = '';
+        }
+
+        // Check URL for product ID
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('product') || params.get('id');
+            if (productId) {
+                document.getElementById('trackingInput').value = productId;
+                trackProduct();
+            }
+        });
+    </script>
+</body>
+
+</html>

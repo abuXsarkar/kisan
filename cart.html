@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | KisanDirect NE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: var(--space-lg);
+            padding: var(--space-lg);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-md);
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .cart-item-farmer {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            margin-top: var(--space-xs);
+        }
+
+        .cart-item-farmer img {
+            width: 20px;
+            height: 20px;
+            border-radius: var(--radius-full);
+        }
+
+        .cart-item-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .cart-qty {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+
+        .cart-qty button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: white;
+            cursor: pointer;
+        }
+
+        .cart-summary {
+            position: sticky;
+            top: 100px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
+            font-weight: 700;
+            border-top: 2px solid var(--primary);
+            margin-top: var(--space-md);
+            padding-top: var(--space-lg);
+        }
+
+        .delivery-slot {
+            margin: var(--space-lg) 0;
+        }
+
+        .slot-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .slot-option {
+            padding: var(--space-md);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .slot-option:hover {
+            border-color: var(--primary);
+        }
+
+        .slot-option.selected {
+            border-color: var(--primary);
+            background: #E8F5E9;
+        }
+
+        .slot-time {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .slot-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: var(--space-3xl);
+        }
+
+        .empty-cart-icon {
+            font-size: 80px;
+            margin-bottom: var(--space-lg);
+        }
+
+        @media (max-width: 1024px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-logo">
+                <span>🌾</span>
+                <span>KisanDirect NE</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="products.html" class="nav-link">Products</a>
+                <a href="kisan-tracker.html" class="nav-link">Track Your Kisan</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="cart.html" class="nav-cart" style="background: var(--primary); color: white;">
+                    🛒
+                    <span class="nav-cart-count">3</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Content -->
+    <section class="section">
+        <div class="container">
+            <h1 style="font-size: 32px; font-weight: 700; margin-bottom: var(--space-xl);">Your Cart 🛒</h1>
+
+            <div class="cart-layout">
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items loaded by JS -->
+                </div>
+
+                <div class="cart-summary">
+                    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: var(--space-lg);">Order Summary</h3>
+
+                    <div class="summary-row">
+                        <span>Subtotal (3 items)</span>
+                        <span id="subtotal">₹645</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery</span>
+                        <span style="color: var(--success);">FREE</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Farmer Earnings (82%)</span>
+                        <span style="color: var(--primary);">₹529</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="total">₹645</span>
+                    </div>
+
+                    <!-- Delivery Slot -->
+                    <div class="delivery-slot">
+                        <h4 style="font-size: 14px; font-weight: 600;">Choose Delivery Slot</h4>
+                        <div class="slot-options">
+                            <div class="slot-option selected" onclick="selectSlot(this)">
+                                <div class="slot-time">10 AM - 12 PM</div>
+                                <div class="slot-label">Today</div>
+                            </div>
+                            <div class="slot-option" onclick="selectSlot(this)">
+                                <div class="slot-time">2 PM - 4 PM</div>
+                                <div class="slot-label">Today</div>
+                            </div>
+                            <div class="slot-option" onclick="selectSlot(this)">
+                                <div class="slot-time">6 PM - 8 PM</div>
+                                <div class="slot-label">Today</div>
+                            </div>
+                            <div class="slot-option" onclick="selectSlot(this)">
+                                <div class="slot-time">8 AM - 10 AM</div>
+                                <div class="slot-label">Tomorrow</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-full mt-lg" onclick="checkout()">
+                        Proceed to Checkout →
+                    </button>
+
+                    <div style="text-align: center; margin-top: var(--space-md);">
+                        <span style="font-size: 13px; color: var(--text-secondary);">
+                            🔒 Secure checkout with Razorpay
+                        </span>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div
+                        style="display: flex; justify-content: center; gap: var(--space-lg); margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid var(--border);">
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px;">🌿</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Organic</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px;">🚚</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Same Day</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px;">👨‍🌾</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Direct</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/mock-data.js"></script>
+    <script>
+        // Demo cart items
+        const cartItems = [
+            { product: MOCK_DATA.products[0], qty: 1 }, // Bhut Jolokia
+            { product: MOCK_DATA.products[1], qty: 2 }, // Kaji Nemu
+            { product: MOCK_DATA.products[4], qty: 1 }  // Paleng Xaak
+        ];
+
+        function loadCart() {
+            const container = document.getElementById('cartItems');
+
+            container.innerHTML = cartItems.map((item, index) => {
+                const farmer = getFarmerById(item.product.farmerId);
+                return `
+                    <div class="cart-item animate-fade-in-up">
+                        <div class="cart-item-image">${item.product.image}</div>
+                        <div>
+                            <div class="cart-item-name">${item.product.name}</div>
+                            <div class="cart-item-farmer">
+                                <img src="${farmer.photo}" alt="${farmer.name}">
+                                by ${farmer.name}, ${farmer.village}
+                            </div>
+                            <div class="cart-qty">
+                                <button onclick="updateQty(${index}, -1)">−</button>
+                                <span style="min-width: 30px; text-align: center;">${item.qty}</span>
+                                <button onclick="updateQty(${index}, 1)">+</button>
+                                <button onclick="removeItem(${index})" style="margin-left: var(--space-md); color: var(--error); border-color: var(--error);">🗑️</button>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="cart-item-price">₹${item.product.price * item.qty}</div>
+                            <div style="font-size: 13px; color: var(--text-muted);">₹${item.product.price} × ${item.qty}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateTotals();
+        }
+
+        function updateQty(index, delta) {
+            cartItems[index].qty = Math.max(1, cartItems[index].qty + delta);
+            loadCart();
+        }
+
+        function removeItem(index) {
+            cartItems.splice(index, 1);
+            loadCart();
+        }
+
+        function updateTotals() {
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.qty), 0);
+            document.getElementById('subtotal').textContent = `₹${subtotal}`;
+            document.getElementById('total').textContent = `₹${subtotal}`;
+        }
+
+        function selectSlot(element) {
+            document.querySelectorAll('.slot-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function checkout() {
+            alert('🎉 Order placed successfully!\n\nThis is a demo. In the real app, you would be redirected to Razorpay for secure payment.');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCart);
+    </script>
+</body>
+
+</html>

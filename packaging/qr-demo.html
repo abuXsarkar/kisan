@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Packaging Demo | KisanDirect NE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            min-height: 100vh;
+        }
+
+        .demo-header {
+            text-align: center;
+            padding: var(--space-2xl) 0;
+            color: white;
+        }
+
+        .demo-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .demo-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .package-scene {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-2xl);
+            gap: var(--space-3xl);
+            flex-wrap: wrap;
+        }
+
+        .package-3d {
+            perspective: 1000px;
+        }
+
+        .package-box {
+            width: 320px;
+            height: 400px;
+            background: linear-gradient(180deg, #8B7355 0%, #6B4423 100%);
+            border-radius: 20px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 4s ease-in-out infinite;
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: rotateY(-5deg) rotateX(5deg) translateY(0);
+            }
+
+            50% {
+                transform: rotateY(5deg) rotateX(-5deg) translateY(-20px);
+            }
+        }
+
+        .package-front {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, #D7CCC8 0%, #BCAAA4 100%);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #8D6E63;
+        }
+
+        .package-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 24px;
+            font-weight: 700;
+            color: #2E7D32;
+            margin-bottom: var(--space-lg);
+        }
+
+        .package-product {
+            font-size: 20px;
+            font-weight: 600;
+            color: #3E2723;
+            margin-bottom: var(--space-xs);
+        }
+
+        .package-assamese {
+            font-size: 14px;
+            color: #5D4037;
+            margin-bottom: var(--space-lg);
+        }
+
+        .qr-wrapper {
+            background: white;
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(46, 125, 50, 0.3), transparent);
+            animation: scan 2s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+        }
+
+        .package-scan-text {
+            margin-top: var(--space-md);
+            font-size: 12px;
+            color: #5D4037;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .package-footer {
+            margin-top: var(--space-lg);
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .package-badge {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .scan-result {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            max-width: 400px;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .scan-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scan-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+
+        .scan-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .scan-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .farmer-preview {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            background: var(--bg-secondary);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .farmer-preview img {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            border: 3px solid var(--primary);
+        }
+
+        .journey-mini {
+            margin-top: var(--space-lg);
+        }
+
+        .journey-step {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) 0;
+        }
+
+        .journey-step-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .journey-step-text {
+            font-size: 14px;
+        }
+
+        .journey-step-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .view-more-btn {
+            display: block;
+            width: 100%;
+            margin-top: var(--space-xl);
+            padding: var(--space-md);
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .view-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .demo-nav {
+            position: fixed;
+            bottom: var(--space-lg);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--space-md);
+            z-index: 100;
+        }
+
+        .demo-nav a {
+            padding: var(--space-md) var(--space-xl);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-base);
+        }
+
+        .demo-nav a:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .package-scene {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="demo-header">
+        <h1 class="demo-title">📦 KisanDirect Packaging System</h1>
+        <p class="demo-subtitle">Every box tells a story. Scan to meet your farmer.</p>
+    </header>
+
+    <!-- Package Scene -->
+    <div class="package-scene">
+        <!-- 3D Package -->
+        <div class="package-3d">
+            <div class="package-box">
+                <div class="package-front">
+                    <div class="package-logo">
+                        <span>🌾</span>
+                        <span>KisanDirect NE</span>
+                    </div>
+
+                    <div class="package-product">Bhut Jolokia</div>
+                    <div class="package-assamese">ভূত জলকীয়া • Ghost Pepper</div>
+
+                    <div class="qr-wrapper">
+                        <div class="qr-code" id="packageQR"></div>
+                    </div>
+
+                    <div class="package-scan-text">
+                        👆 SCAN TO MEET YOUR FARMER
+                    </div>
+
+                    <div class="package-footer">
+                        <span class="package-badge">🌿 Organic</span>
+                        <span class="package-badge">✓ GI Tagged</span>
+                        <span class="package-badge">📍 Jorhat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan Result -->
+        <div class="scan-result">
+            <div class="scan-header">
+                <div class="scan-icon">✓</div>
+                <div>
+                    <div class="scan-title">Verified Product</div>
+                    <div class="scan-subtitle">KISANDIRECT-P001-F003</div>
+                </div>
+            </div>
+
+            <div class="farmer-preview">
+                <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Bhupen Das">
+                <div>
+                    <div style="font-weight: 600; font-size: 18px;">Bhupen Das</div>
+                    <div style="font-size: 14px; color: var(--text-secondary);">📍 Jorhat, Assam</div>
+                    <div style="font-size: 13px; color: var(--primary);">⭐ 4.7 • 512 orders</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+                <span class="badge badge-verified">✓ Organic Certified</span>
+                <span class="badge badge-premium">⭐ GI Tagged</span>
+                <span class="badge badge-organic">🌶️ Export Quality</span>
+            </div>
+
+            <div class="journey-mini">
+                <h4 style="font-size: 14px; font-weight: 600; margin-bottom: var(--space-md);">📦 Product Journey</h4>
+
+                <div class="journey-step">
+                    <div class="journey-step-icon">🌱</div>
+                    <span class="journey-step-text">Harvested from farm</span>
+                    <span class="journey-step-time">5:30 AM</span>
+                </div>
+                <div class="journey-step">
+                    <div class="journey-step-icon">✅</div>
+                    <span class="journey-step-text">Quality checked</span>
+                    <span class="journey-step-time">6:00 AM</span>
+                </div>
+                <div class="journey-step">
+                    <div class="journey-step-icon">📦</div>
+                    <span class="journey-step-text">Packed with QR</span>
+                    <span class="journey-step-time">6:30 AM</span>
+                </div>
+                <div class="journey-step">
+                    <div class="journey-step-icon">🏠</div>
+                    <span class="journey-step-text">Delivered to you</span>
+                    <span class="journey-step-time">10:00 AM</span>
+                </div>
+            </div>
+
+            <a href="../kisan-tracker.html?id=P001" class="view-more-btn">
+                View Full Farmer Story →
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="demo-nav">
+        <a href="../index.html">🏠 Home</a>
+        <a href="../products.html">🛒 Shop</a>
+        <a href="../farmer/dashboard.html">👨‍🌾 Farmer View</a>
+    </nav>
+
+    <script>
+        // Generate QR code
+        const qr = qrcode(0, 'M');
+        qr.addData('KISANDIRECT-P001-F003-BHUTJOLOKIA-JORHAT-1706961600000');
+        qr.make();
+        document.getElementById('packageQR').innerHTML = qr.createSvgTag(4, 0);
+    </script>
+</body>
+
+</html>

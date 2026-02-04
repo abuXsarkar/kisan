@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Produce | KisanDirect NE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Demo Banner -->
+    <div class="demo-banner"
+        style="background: linear-gradient(90deg, #FF6B35, #F7931E); color: white; text-align: center; padding: 8px 0; font-size: 14px; font-weight: 500;">
+        🚀 Demo Prototype | <a href="farmer/dashboard.html" style="color: white; text-decoration: underline;">Switch to
+            Farmer View</a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-logo">
+                <span>🌾</span>
+                <span>KisanDirect NE</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="products.html" class="nav-link active">Products</a>
+                <a href="kisan-tracker.html" class="nav-link">Track Your Kisan</a>
+                <a href="#" class="nav-link">About</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="cart.html" class="nav-cart">
+                    🛒
+                    <span class="nav-cart-count" id="cartCount">3</span>
+                </a>
+                <button class="btn btn-primary btn-sm">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section style="background: var(--gradient-primary); color: white; padding: var(--space-2xl) 0;">
+        <div class="container">
+            <h1 style="font-size: 36px; font-weight: 700;">Fresh Produce</h1>
+            <p style="opacity: 0.9;">Harvested today, delivered fresh to your doorstep</p>
+        </div>
+    </section>
+
+    <!-- Filters & Products -->
+    <section class="section">
+        <div class="container">
+            <!-- Category Filters -->
+            <div class="filters" id="categoryFilters">
+                <!-- Loaded by JS -->
+            </div>
+
+            <!-- Sort & Search -->
+            <div class="flex justify-between items-center mb-lg">
+                <div class="text-secondary" id="productCount">Showing 10 products</div>
+                <div class="flex gap-md">
+                    <input type="text" class="input" placeholder="Search products..." style="width: 250px;"
+                        id="searchInput" oninput="filterProducts()">
+                    <select class="input select" style="width: 180px;" id="sortSelect" onchange="sortProducts()">
+                        <option value="default">Sort by: Popular</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="freshness">Freshness</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid stagger" id="productGrid">
+                <!-- Products loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: var(--text-primary); color: white; padding: var(--space-xl) 0; text-align: center;">
+        <div class="container">
+            <div style="font-size: 20px; font-weight: 600; margin-bottom: var(--space-sm);">🌾 KisanDirect NE</div>
+            <p style="color: rgba(255,255,255,0.7); font-size: 14px;">From Assam's Farms to Your Table – Fresh, Fair,
+                Traceable</p>
+        </div>
+    </footer>
+
+    <script src="js/mock-data.js"></script>
+    <script>
+        let currentCategory = 'All';
+
+        // Load category filters
+        function loadFilters() {
+            const container = document.getElementById('categoryFilters');
+            container.innerHTML = MOCK_DATA.categories.map(cat => `
+                <button class="filter-btn ${cat.name === currentCategory ? 'active' : ''}" 
+                        onclick="selectCategory('${cat.name}')">
+                    ${cat.icon} ${cat.name} (${cat.count})
+                </button>
+            `).join('');
+        }
+
+        // Select category
+        function selectCategory(category) {
+            currentCategory = category;
+            loadFilters();
+            loadProducts();
+        }
+
+        // Load products
+        function loadProducts() {
+            const container = document.getElementById('productGrid');
+            let products = getProductsByCategory(currentCategory);
+
+            // Search filter
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm) {
+                products = products.filter(p =>
+                    p.name.toLowerCase().includes(searchTerm) ||
+                    p.nameAssamese.includes(searchTerm)
+                );
+            }
+
+            document.getElementById('productCount').textContent = `Showing ${products.length} products`;
+
+            container.innerHTML = products.map(product => {
+                const farmer = getFarmerById(product.farmerId);
+                return `
+                    <div class="card product-card animate-fade-in-up">
+                        ${product.organic ? '<div class="badge badge-organic" style="position: absolute; top: 12px; left: 12px; z-index: 1;">🌿 Organic</div>' : ''}
+                        <a href="product-detail.html?id=${product.id}" style="display: block;">
+                            <div class="card-image">
+                                <span style="font-size: 80px;">${product.image}</span>
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <div class="badge badge-fresh mb-sm">${product.freshness}</div>
+                            <a href="product-detail.html?id=${product.id}">
+                                <h3 class="card-title">${product.name}</h3>
+                            </a>
+                            <p class="card-subtitle">${product.nameAssamese}</p>
+                            
+                            <div class="flex items-center gap-sm mt-sm">
+                                <span style="color: #FFB300;">★</span>
+                                <span style="font-size: 14px;">${product.rating} (${product.reviews} reviews)</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center mt-md">
+                                <div class="product-price">
+                                    ₹${product.price} <span class="product-unit">/ ${product.unit}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="product-farmer">
+                                <img src="${farmer.photo}" alt="${farmer.name}">
+                                <span class="product-farmer-name">by <strong>${farmer.name}</strong>, ${farmer.village}</span>
+                            </div>
+                            
+                            <div class="flex gap-sm mt-md">
+                                <button class="btn btn-primary flex-1" onclick="addToCart('${product.id}')">
+                                    Add to Cart
+                                </button>
+                                <a href="product-detail.html?id=${product.id}" class="btn btn-secondary btn-icon">
+                                    👁️
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filter products
+        function filterProducts() {
+            loadProducts();
+        }
+
+        // Sort products
+        function sortProducts() {
+            const sortBy = document.getElementById('sortSelect').value;
+            let products = [...MOCK_DATA.products];
+
+            if (sortBy === 'price-low') {
+                products.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-high') {
+                products.sort((a, b) => b.price - a.price);
+            }
+
+            MOCK_DATA.products = products;
+            loadProducts();
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = getProductById(productId);
+            if (product) {
+                alert(`${product.name} added to cart! 🛒`);
+                const count = parseInt(document.getElementById('cartCount').textContent) + 1;
+                document.getElementById('cartCount').textContent = count;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFilters();
+            loadProducts();
+        });
+    </script>
+</body>
+
+</html>

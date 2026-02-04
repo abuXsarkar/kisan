@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Pickup | Farmer Dashboard | KisanDirect NE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .pickup-hero {
+            background: linear-gradient(135deg, #E65100 0%, #FF9800 100%);
+            color: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .pickup-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-xl);
+            align-items: start;
+        }
+
+        .calendar-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .calendar-nav button {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .calendar-nav button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--space-xs);
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: var(--space-sm);
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+
+        .calendar-day:hover:not(.disabled) {
+            background: var(--bg-secondary);
+        }
+
+        .calendar-day.disabled {
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .calendar-day.today {
+            background: #E8F5E9;
+            color: var(--primary);
+        }
+
+        .calendar-day.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.has-pickup::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 6px;
+            height: 6px;
+            background: var(--secondary);
+            border-radius: var(--radius-full);
+        }
+
+        .time-slots {
+            margin-top: var(--space-xl);
+        }
+
+        .time-slot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .time-slot {
+            padding: var(--space-md);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+
+        .time-slot:hover {
+            border-color: var(--primary);
+        }
+
+        .time-slot.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .time-slot.unavailable {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .summary-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: var(--space-xl);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .vehicle-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .vehicle-option {
+            padding: var(--space-lg);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+
+        .vehicle-option:hover {
+            border-color: var(--primary);
+        }
+
+        .vehicle-option.selected {
+            border-color: var(--primary);
+            background: #E8F5E9;
+        }
+
+        .vehicle-icon {
+            font-size: 32px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .upcoming-pickups {
+            margin-top: var(--space-xl);
+        }
+
+        .pickup-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-sm);
+        }
+
+        .pickup-date {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius-md);
+            text-align: center;
+            padding: var(--space-sm);
+        }
+
+        .pickup-date .day {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .pickup-date .month {
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 1024px) {
+            .pickup-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span>🌾</span>
+                <span>KisanDirect</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="dashboard.html" class="sidebar-link">
+                        <span class="icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="icon">📦</span>
+                        <span>My Products</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="icon">🛒</span>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="cold-storage.html" class="sidebar-link">
+                        <span class="icon">❄️</span>
+                        <span>Cold Storage</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="price-trends.html" class="sidebar-link">
+                        <span class="icon">📈</span>
+                        <span>Price Trends</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="pickup.html" class="sidebar-link active">
+                        <span class="icon">🚚</span>
+                        <span>Schedule Pickup</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div style="margin-top: auto; padding-top: var(--space-xl); border-top: 1px solid var(--border);">
+                <a href="../index.html" class="sidebar-link">
+                    <span class="icon">🛍️</span>
+                    <span>Customer View</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">🚚 Schedule Pickup</h1>
+            </div>
+
+            <!-- Hero -->
+            <div class="pickup-hero animate-fade-in">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 style="font-size: 24px; font-weight: 700;">Request Bulk Pickup</h2>
+                        <p style="opacity: 0.9;">We'll collect your produce from your farm. Free pickup for orders above
+                            50 kg!</p>
+                    </div>
+                    <div style="font-size: 48px;">🚛</div>
+                </div>
+            </div>
+
+            <div class="pickup-grid">
+                <!-- Calendar & Time Selection -->
+                <div>
+                    <div class="calendar-container animate-fade-in-up">
+                        <div class="calendar-header">
+                            <h3 style="font-size: 18px; font-weight: 600;">📅 Select Date</h3>
+                            <div style="font-weight: 600;" id="currentMonth">February 2026</div>
+                            <div class="calendar-nav">
+                                <button onclick="changeMonth(-1)">←</button>
+                                <button onclick="changeMonth(1)">→</button>
+                            </div>
+                        </div>
+
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Generated by JS -->
+                        </div>
+
+                        <!-- Time Slots -->
+                        <div class="time-slots">
+                            <h4 style="font-weight: 600;">⏰ Select Time Slot</h4>
+                            <div class="time-slot-grid">
+                                <div class="time-slot" onclick="selectTime(this, '6:00 - 8:00 AM')">
+                                    6:00 - 8:00 AM
+                                </div>
+                                <div class="time-slot selected" onclick="selectTime(this, '8:00 - 10:00 AM')">
+                                    8:00 - 10:00 AM
+                                </div>
+                                <div class="time-slot" onclick="selectTime(this, '10:00 AM - 12:00 PM')">
+                                    10:00 AM - 12:00 PM
+                                </div>
+                                <div class="time-slot" onclick="selectTime(this, '2:00 - 4:00 PM')">
+                                    2:00 - 4:00 PM
+                                </div>
+                                <div class="time-slot" onclick="selectTime(this, '4:00 - 6:00 PM')">
+                                    4:00 - 6:00 PM
+                                </div>
+                                <div class="time-slot unavailable" title="Not available">
+                                    6:00 - 8:00 PM
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Pickups -->
+                    <div class="upcoming-pickups animate-fade-in-up" style="animation-delay: 0.2s;">
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: var(--space-lg);">📋 Upcoming
+                            Pickups</h3>
+
+                        <div class="pickup-item">
+                            <div class="pickup-date">
+                                <div class="day">05</div>
+                                <div class="month">Feb</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Vegetables Collection</div>
+                                <div style="font-size: 14px; color: var(--text-secondary);">8:00 AM - 10:00 AM • 75 kg
+                                </div>
+                            </div>
+                            <span class="badge badge-fresh">Scheduled</span>
+                        </div>
+
+                        <div class="pickup-item">
+                            <div class="pickup-date">
+                                <div class="day">08</div>
+                                <div class="month">Feb</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Bhut Jolokia Bulk</div>
+                                <div style="font-size: 14px; color: var(--text-secondary);">6:00 AM - 8:00 AM • 30 kg
+                                </div>
+                            </div>
+                            <span class="badge badge-verified">Confirmed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Card -->
+                <div class="summary-card animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: var(--space-lg);">📦 Pickup Details
+                    </h3>
+
+                    <div class="input-group">
+                        <label class="input-label">Produce Type</label>
+                        <select class="input select">
+                            <option>Mixed Vegetables</option>
+                            <option>Leafy Greens</option>
+                            <option>Bhut Jolokia</option>
+                            <option>Fruits</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Approximate Quantity (kg)</label>
+                        <input type="number" class="input" value="50" id="quantityInput">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Vehicle Type</label>
+                        <div class="vehicle-options">
+                            <div class="vehicle-option" onclick="selectVehicle(this)">
+                                <div class="vehicle-icon">🛵</div>
+                                <div style="font-weight: 500;">Bike</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Up to 30 kg</div>
+                            </div>
+                            <div class="vehicle-option selected" onclick="selectVehicle(this)">
+                                <div class="vehicle-icon">🛺</div>
+                                <div style="font-weight: 500;">Auto</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Up to 100 kg</div>
+                            </div>
+                            <div class="vehicle-option" onclick="selectVehicle(this)">
+                                <div class="vehicle-icon">🚚</div>
+                                <div style="font-weight: 500;">Mini Truck</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Up to 500 kg</div>
+                            </div>
+                            <div class="vehicle-option" onclick="selectVehicle(this)">
+                                <div class="vehicle-icon">🚛</div>
+                                <div style="font-weight: 500;">Truck</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">500+ kg</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Special Instructions</label>
+                        <textarea class="input" rows="3"
+                            placeholder="E.g., Call before arriving, gate code 1234..."></textarea>
+                    </div>
+
+                    <!-- Summary -->
+                    <div
+                        style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: var(--space-md); margin: var(--space-lg) 0;">
+                        <div class="summary-row">
+                            <span>Date</span>
+                            <span id="selectedDate">Feb 5, 2026</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Time</span>
+                            <span id="selectedTime">8:00 - 10:00 AM</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Vehicle</span>
+                            <span>Auto (🛺)</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Pickup Fee</span>
+                            <span style="color: var(--success); font-weight: 600;">FREE</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-full" onclick="schedulePickup()">
+                        🚚 Schedule Pickup
+                    </button>
+
+                    <p
+                        style="text-align: center; font-size: 13px; color: var(--text-muted); margin-top: var(--space-md);">
+                        You'll receive a confirmation SMS within 30 minutes
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let selectedDay = 5;
+        let selectedTimeSlot = '8:00 - 10:00 AM';
+
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            // Day headers
+            let html = days.map(d => `<div class="calendar-day-header">${d}</div>`).join('');
+
+            // Empty cells for first week (Feb 2026 starts on Sunday)
+            // Feb 2026 days
+            for (let i = 1; i <= 28; i++) {
+                const isToday = i === 4;
+                const isSelected = i === selectedDay;
+                const isPast = i < 4;
+                const hasPickup = i === 5 || i === 8;
+
+                html += `
+                    <div class="calendar-day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${isPast ? 'disabled' : ''} ${hasPickup ? 'has-pickup' : ''}"
+                         onclick="${!isPast ? `selectDay(${i})` : ''}">
+                        ${i}
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function selectDay(day) {
+            selectedDay = day;
+            generateCalendar();
+            document.getElementById('selectedDate').textContent = `Feb ${day}, 2026`;
+        }
+
+        function selectTime(element, time) {
+            if (element.classList.contains('unavailable')) return;
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedTimeSlot = time;
+            document.getElementById('selectedTime').textContent = time;
+        }
+
+        function selectVehicle(element) {
+            document.querySelectorAll('.vehicle-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function changeMonth(delta) {
+            alert('Calendar navigation is a demo feature. Only February 2026 is available.');
+        }
+
+        function schedulePickup() {
+            const quantity = document.getElementById('quantityInput').value;
+            alert(`✅ Pickup scheduled successfully!\n\nDate: Feb ${selectedDay}, 2026\nTime: ${selectedTimeSlot}\nQuantity: ${quantity} kg\n\nOur driver will call you 30 minutes before arrival.`);
+        }
+
+        document.addEventListener('DOMContentLoaded', generateCalendar);
+    </script>
+</body>
+
+</html>

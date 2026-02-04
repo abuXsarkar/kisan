@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail | KisanDirect NE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        .product-gallery {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 180px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .product-info h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .product-info .assamese-name {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .stars {
+            color: #FFB300;
+            font-size: 18px;
+        }
+
+        .price-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .price-main {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .price-unit {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .qty-btn {
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .qty-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .qty-value {
+            font-size: 20px;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .farmer-section {
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .farmer-section-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .farmer-section-header img {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            border: 3px solid var(--primary);
+        }
+
+        .farmer-section-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .farmer-section-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .qr-section {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            text-align: center;
+            margin: var(--space-xl) 0;
+        }
+
+        .qr-section h4 {
+            color: var(--primary-dark);
+            margin-bottom: var(--space-md);
+        }
+
+        .qr-box {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: var(--radius-md);
+            margin: 0 auto var(--space-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .nutrition-item {
+            text-align: center;
+            padding: var(--space-md);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .nutrition-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nutrition-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .product-detail {
+                grid-template-columns: 1fr;
+            }
+
+            .product-gallery {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Demo Banner -->
+    <div class="demo-banner"
+        style="background: linear-gradient(90deg, #FF6B35, #F7931E); color: white; text-align: center; padding: 8px 0; font-size: 14px; font-weight: 500;">
+        🚀 Demo Prototype | <a href="farmer/dashboard.html" style="color: white; text-decoration: underline;">Switch to
+            Farmer View</a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="index.html" class="nav-logo">
+                <span>🌾</span>
+                <span>KisanDirect NE</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="products.html" class="nav-link active">Products</a>
+                <a href="kisan-tracker.html" class="nav-link">Track Your Kisan</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="cart.html" class="nav-cart">
+                    🛒
+                    <span class="nav-cart-count">3</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Detail -->
+    <section class="section">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div style="margin-bottom: var(--space-lg);">
+                <a href="products.html" style="color: var(--text-secondary);">← Back to Products</a>
+            </div>
+
+            <div class="product-detail" id="productDetail">
+                <!-- Loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <h2 class="section-title text-left">You May Also Like</h2>
+            <div class="product-grid mt-lg" id="relatedProducts">
+                <!-- Loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <script src="js/mock-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script>
+        let quantity = 1;
+
+        function getProductIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id') || 'P001';
+        }
+
+        function loadProductDetail() {
+            const productId = getProductIdFromURL();
+            const product = getProductById(productId);
+            const farmer = getFarmerById(product.farmerId);
+
+            document.title = `${product.name} | KisanDirect NE`;
+
+            const container = document.getElementById('productDetail');
+            container.innerHTML = `
+                <div class="product-gallery animate-fade-in">
+                    <span>${product.image}</span>
+                </div>
+                
+                <div class="product-info animate-fade-in-up">
+                    <div class="flex gap-sm mb-md">
+                        ${product.organic ? '<span class="badge badge-organic">🌿 Organic</span>' : ''}
+                        <span class="badge badge-fresh">${product.freshness}</span>
+                    </div>
+                    
+                    <h1>${product.name}</h1>
+                    <p class="assamese-name">${product.nameAssamese}</p>
+                    
+                    <div class="product-rating">
+                        <div class="stars">★★★★★</div>
+                        <span>${product.rating} rating</span>
+                        <span style="color: var(--text-muted);">•</span>
+                        <span>${product.reviews} reviews</span>
+                    </div>
+                    
+                    <div class="price-box">
+                        <span class="price-main">₹${product.price}</span>
+                        <span class="price-unit">/ ${product.unit}</span>
+                        
+                        <div class="quantity-selector">
+                            <span style="color: var(--text-secondary);">Quantity:</span>
+                            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                            <span class="qty-value" id="qtyValue">1</span>
+                            <button class="qty-btn" onclick="changeQty(1)">+</button>
+                            <span style="color: var(--text-muted); margin-left: var(--space-md);">
+                                Total: <strong id="totalPrice">₹${product.price}</strong>
+                            </span>
+                        </div>
+                        
+                        <div class="flex gap-md mt-lg">
+                            <button class="btn btn-primary btn-lg flex-1" onclick="addToCart()">
+                                🛒 Add to Cart
+                            </button>
+                            <button class="btn btn-orange btn-lg flex-1">
+                                ⚡ Buy Now
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 15px; line-height: 1.7; color: var(--text-secondary);">
+                        ${product.description}
+                    </p>
+                    
+                    <!-- Farmer Section -->
+                    <div class="farmer-section">
+                        <div class="farmer-section-header">
+                            <img src="${farmer.photo}" alt="${farmer.name}">
+                            <div>
+                                <h3>Grown by ${farmer.name}</h3>
+                                <p>📍 ${farmer.village}, ${farmer.district}</p>
+                            </div>
+                            <a href="kisan-tracker.html?product=${product.id}" class="btn btn-secondary btn-sm" style="margin-left: auto;">
+                                View Farmer Story →
+                            </a>
+                        </div>
+                        <div class="flex gap-sm flex-wrap">
+                            ${farmer.certifications.map(c => `<span class="badge badge-verified">✓ ${c}</span>`).join('')}
+                        </div>
+                        <p style="margin-top: var(--space-md); font-size: 14px; color: var(--text-secondary);">
+                            "${farmer.bio}"
+                        </p>
+                    </div>
+                    
+                    <!-- QR Traceability -->
+                    <div class="qr-section">
+                        <h4>🔍 Full Traceability</h4>
+                        <div class="qr-box" id="productQR"></div>
+                        <p style="font-size: 13px; color: var(--primary-dark);">
+                            Scan this QR code on your package to trace the journey from ${farmer.name}'s farm to your kitchen.
+                        </p>
+                        <div style="margin-top: var(--space-md); font-size: 12px; color: var(--text-secondary);">
+                            Product ID: KISANDIRECT-${product.id}-${farmer.id}
+                        </div>
+                    </div>
+                    
+                    <!-- Nutrition -->
+                    <h4 style="margin-top: var(--space-xl);">Nutrition Facts</h4>
+                    <div class="nutrition-grid">
+                        ${Object.entries(product.nutrition).map(([key, value]) => `
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${value}</div>
+                                <div class="nutrition-label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Generate QR code
+            const qr = qrcode(0, 'M');
+            qr.addData(`KISANDIRECT-${product.id}-${farmer.id}-${Date.now()}`);
+            qr.make();
+            document.getElementById('productQR').innerHTML = qr.createSvgTag(3, 0);
+        }
+
+        function changeQty(delta) {
+            quantity = Math.max(1, quantity + delta);
+            document.getElementById('qtyValue').textContent = quantity;
+
+            const productId = getProductIdFromURL();
+            const product = getProductById(productId);
+            document.getElementById('totalPrice').textContent = `₹${product.price * quantity}`;
+        }
+
+        function addToCart() {
+            const productId = getProductIdFromURL();
+            const product = getProductById(productId);
+            alert(`Added ${quantity}x ${product.name} to cart! 🛒`);
+        }
+
+        function loadRelatedProducts() {
+            const container = document.getElementById('relatedProducts');
+            const currentId = getProductIdFromURL();
+            const related = MOCK_DATA.products.filter(p => p.id !== currentId).slice(0, 4);
+
+            container.innerHTML = related.map(product => {
+                const farmer = getFarmerById(product.farmerId);
+                return `
+                    <div class="card product-card">
+                        <a href="product-detail.html?id=${product.id}">
+                            <div class="card-image">
+                                <span style="font-size: 64px;">${product.image}</span>
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <a href="product-detail.html?id=${product.id}">
+                                <h3 class="card-title">${product.name}</h3>
+                            </a>
+                            <div class="product-price mt-sm">
+                                ₹${product.price} <span class="product-unit">/ ${product.unit}</span>
+                            </div>
+                            <div class="product-farmer">
+                                <img src="${farmer.photo}" alt="${farmer.name}">
+                                <span class="product-farmer-name">by ${farmer.name}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProductDetail();
+            loadRelatedProducts();
+        });
+    </script>
+</body>
+
+</html>
