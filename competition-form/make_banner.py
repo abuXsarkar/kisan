@@ -13,7 +13,7 @@ from PIL import Image
 import qrcode
 from qrcode.constants import ERROR_CORRECT_H
 
-SRC = "/home/user/kisan/competition-form/banner-original-v2.jpeg"
+SRC = "/home/user/kisan/competition-form/banner-original-v3.jpeg"
 
 # Centre of the original QR card in the 853x1280 banner, and the paste size.
 CARD_CENTER = (782, 972)
